@@ -255,3 +255,7 @@ bugging:
   priority: P2
   supportPage: https://sfdc.co/CKV_AWS_69
   vulnerabilityCategory: Insecure Configuration of Network Infrastructure
+- namespace: ramesh
+  priority: P2
+  supportPage: https://sfdc.co/CKV_AWS_69
+  vulnerabilityCategory: Insecure Configuration of Network Infrastructure
