@@ -1,0 +1,53 @@
+import yaml
+
+# Read data from YAML file
+with open('data.yaml', 'r') as file:
+    data = yaml.safe_load(file)
+
+# Define HTML template
+html_template = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard for Bugging Policies</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial</th>
+                    <th>Namespace</th>
+                    <th>Priority</th>
+                    <th>Support Page</th>
+                    <th>Vulnerability Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+"""
+
+# Generate HTML for table rows dynamically
+table_rows = ""
+for entry in data:
+    table_rows += "<tr>"
+    for key, value in entry.items():
+        table_rows += "<td>{}</td>".format(value)
+    table_rows += "</tr>"
+
+# Combine HTML template with dynamic table rows
+final_html = html_template.format(table_rows)
+
+# Write the final HTML to a file
+with open('dashboard.html', 'w') as file:
+    file.write(final_html)
+
+print("HTML file generated successfully.")
