@@ -1,53 +1,77 @@
-import yaml
-
-# Read data from YAML file
-with open('data.yaml', 'r') as file:
-    data = yaml.safe_load(file)
-
-# Define HTML template
-html_template = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" href="inventory.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <h1>Dashboard for Bugging Policies</h1>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Serial</th>
-                    <th>Namespace</th>
-                    <th>Priority</th>
-                    <th>Support Page</th>
-                    <th>Vulnerability Category</th>
-                </tr>
-            </thead>
-            <tbody>
-                {}
-            </tbody>
-        </table>
+   
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidenav">
+
+                <div class="dropdown-item">
+                    <button class="dropdown-btn">CI Guardrails 
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                      <div class="dropdown-container">
+                        <a href="#" class="side-tab active" data-table="checkov" onclick="getDatafromtabs('checkov')">Terraform</a>
+                        <a href="#" class="side-tab" data-table="docker" onclick="getDatafromtabs('docker')">Dockerfile</a>
+                        <a href="#" class="side-tab" data-table="helm" onclick="getDatafromtabs('helm')">Helm</a> 
+                      </div>
+                </div>
+           
+                <div class="pp-dropdown-item">
+                    <button class="pp-dropdown-btn">3PP Guardrails 
+                        <i class="fa fa-caret-right"></i>
+                      </button>
+                      <div class="pp-dropdown-container">
+                        <a href="#">Intake</a>
+                        <a href="#">CI Build</a>
+                      </div>
+                </div>
+            
+                <div class="pp-dropdown-item">
+                    <button class="pp-dropdown-btn">MultiSubstrate Guardrails 
+                        <i class="fa fa-caret-right"></i>
+                      </button>
+                      <div class="pp-dropdown-container">
+                        <a href="#">Hardcoded</a>
+                      </div>
+                </div>
+           
+            </div> 
+           
+        </div>
+        <div id="main-content">
+            
+            <div class="dashboard-heading">
+                <h1>Inventory Dashboard</h1>
+            </div>
+            <div class="tabs">
+                <div class="tab" data-table="unenforce" onclick="getIncubatingData()">Incubating</div>
+                <div class="tab" data-table="bugging" onclick="fetchyamldata('bugging.yaml')">Bugging Enabled</div>
+                <div class="tab active" data-table="enforce" onclick="fetchyamldata('policies.yaml')">Enforced</div>
+            </div>
+            <h3 id="policiesCount"></h3>
+
+            <div id="dataTable"></div>
+
+        </div>
+       
+
     </div>
+
+    <div id="action-buttons">
+        <div> <input class="search" type="text" id="searchPolicy" placeholder="Search for policy"> </div>
+
+        <img src="git-icon.png" href="https://git.soma.salesforce.com/opa/falcon-policies"  alt="Git" id="git-icon">
+        <img src="slack-icon.png" href="https://salesforce-internal.slack.com/archives/C0299NZBQKF"  alt="Slack" id="slack-icon">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script> 
+    <script src="Inventory.js"></script> 
 </body>
 </html>
-"""
-
-# Generate HTML for table rows dynamically
-table_rows = ""
-for entry in data:
-    table_rows += "<tr>"
-    for key, value in entry.items():
-        table_rows += "<td>{}</td>".format(value)
-    table_rows += "</tr>"
-
-# Combine HTML template with dynamic table rows
-final_html = html_template.format(table_rows)
-
-# Write the final HTML to a file
-with open('dashboard.html', 'w') as file:
-    file.write(final_html)
-
-print("HTML file generated successfully.")
